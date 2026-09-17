@@ -39,6 +39,9 @@ const sans = "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
 const SETTLEMENTS_URL =
   "https://raw.githubusercontent.com/heavensclubbb/settlement-tracker/main/settlements.json";
 
+const DISCLAIMER_VERSION = "2026-09-17";
+const DISCLAIMER_STORAGE_KEY = "settled_disclaimer_version";
+
 const statusMeta = {
   live: { label: "Open", color: signal, bg: signalSoft },
   needs_review: { label: "Check details", color: gold, bg: goldSoft },
@@ -1216,7 +1219,7 @@ function TrackScreen({ filed, signedIn }) {
   );
 }
 
-function ProfileScreen({ auth, onBack }) {
+function ProfileScreen({ auth, onBack, onOpenDisclaimer }) {
   const { session, signUp, signInWithPassword, signInWithPasskey, registerPasskey, signOut } = auth;
   const [mode, setMode] = useState("signin"); // signin | signup
   const [email, setEmail] = useState("");
@@ -1686,6 +1689,25 @@ function ProfileScreen({ auth, onBack }) {
           <ProfileRow label="Privacy" value="Coming soon" last />
         </div>
 
+        <button
+          onClick={onOpenDisclaimer}
+          style={{
+            width: "100%",
+            marginBottom: 18,
+            background: "#fff",
+            border: `1px solid ${hairline}`,
+            borderRadius: 10,
+            padding: "12px 0",
+            fontFamily: sans,
+            fontSize: 13.5,
+            fontWeight: 600,
+            color: ink,
+            cursor: "pointer",
+          }}
+        >
+          View use disclaimer
+        </button>
+
         <div
           style={{
             border: `1px solid ${hairline}`,
@@ -1751,6 +1773,158 @@ function ProfileRow({ label, value, last }) {
       <span style={{ fontFamily: sans, fontSize: 13.5, color: ink }}>{label}</span>
       <span style={{ fontFamily: sans, fontSize: 13.5, color: slate }}>{value}</span>
     </div>
+  );
+}
+
+function DisclaimerAgreement({ requiresAgreement, onAccept, onClose }) {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="disclaimer-title"
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 50,
+        background: paper,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div style={{ padding: "20px 20px 14px", borderBottom: `1px solid ${hairline}` }}>
+        <div id="disclaimer-title" style={{ fontFamily: sans, fontSize: 19, fontWeight: 700, color: ink }}>
+          Important use disclaimer
+        </div>
+        <div style={{ fontFamily: sans, fontSize: 11.5, color: slate, marginTop: 4 }}>
+          Last updated September 17, 2026
+        </div>
+      </div>
+
+      <div style={{ flex: 1, overflowY: "auto", padding: "18px 20px" }}>
+        <div style={{ fontFamily: sans, fontSize: 13.5, color: ink, lineHeight: 1.55 }}>
+          Please read this before using Settled.
+        </div>
+
+        <DisclaimerSection title="Informational tool only">
+          Settled provides general information from public sources. Settled is not a law
+          firm, lawyer, settlement administrator, claims processor, financial adviser,
+          tax adviser, or government agency. Nothing in the app is legal, financial,
+          tax, or other professional advice, and using it does not create an
+          attorney-client or other professional relationship.
+        </DisclaimerSection>
+
+        <DisclaimerSection title="Verify everything independently">
+          Settlement information may be incomplete, delayed, inaccurate, or outdated.
+          Eligibility, deadlines, required proof, claim procedures, and payment amounts
+          are controlled by the official court documents and settlement administrator.
+          Always verify the official notice and claim website before acting.
+        </DisclaimerSection>
+
+        <DisclaimerSection title="You are responsible for filing">
+          Settled does not file, submit, review, approve, or monitor claims for you.
+          Opening a link or tracking an item in the app does not submit a claim. You are
+          solely responsible for determining eligibility, meeting deadlines, providing
+          accurate information, and completing the official filing process.
+        </DisclaimerSection>
+
+        <DisclaimerSection title="No guaranteed result">
+          Settled does not guarantee that you qualify, that a claim will be accepted,
+          that information will remain available, or that you will receive any payment.
+          To the fullest extent permitted by law, you use the app and rely on its
+          information at your own risk.
+        </DisclaimerSection>
+
+        <DisclaimerSection title="Third-party websites">
+          Claim forms and notices are hosted by third parties that Settled does not
+          control. Their terms, privacy practices, security, availability, and content
+          apply when you leave this app. Review a destination before sharing personal or
+          sensitive information.
+        </DisclaimerSection>
+
+        {requiresAgreement && (
+          <label
+            style={{
+              display: "flex",
+              gap: 10,
+              alignItems: "flex-start",
+              marginTop: 20,
+              padding: 14,
+              border: `1px solid ${hairline}`,
+              borderRadius: 12,
+              background: "#fff",
+              cursor: "pointer",
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
+              style={{ marginTop: 3, width: 17, height: 17, accentColor: ink }}
+            />
+            <span style={{ fontFamily: sans, fontSize: 12.5, color: ink, lineHeight: 1.5 }}>
+              I have read and understand this disclaimer, and I agree to use Settled on
+              this basis.
+            </span>
+          </label>
+        )}
+      </div>
+
+      <div style={{ padding: "14px 20px max(20px, env(safe-area-inset-bottom))", borderTop: `1px solid ${hairline}` }}>
+        {requiresAgreement ? (
+          <button
+            disabled={!checked}
+            onClick={onAccept}
+            style={{
+              width: "100%",
+              background: checked ? ink : "#C9CBCF",
+              color: paper,
+              border: "none",
+              borderRadius: 12,
+              padding: "14px 0",
+              fontFamily: sans,
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: checked ? "pointer" : "default",
+            }}
+          >
+            Agree and continue
+          </button>
+        ) : (
+          <button
+            onClick={onClose}
+            style={{
+              width: "100%",
+              background: ink,
+              color: paper,
+              border: "none",
+              borderRadius: 12,
+              padding: "14px 0",
+              fontFamily: sans,
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Close
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DisclaimerSection({ title, children }) {
+  return (
+    <section style={{ marginTop: 18 }}>
+      <div style={{ fontFamily: sans, fontSize: 12.5, fontWeight: 700, color: ink, marginBottom: 5 }}>
+        {title}
+      </div>
+      <div style={{ fontFamily: sans, fontSize: 12.5, color: slate, lineHeight: 1.55 }}>
+        {children}
+      </div>
+    </section>
   );
 }
 
@@ -1875,6 +2049,16 @@ export default function App() {
   const [view, setView] = useState("list"); // list | detail
   const [activeSettlement, setActiveSettlement] = useState(null);
   const [showBankPrompt, setShowBankPrompt] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      const stored = JSON.parse(window.localStorage.getItem(DISCLAIMER_STORAGE_KEY) || "null");
+      return stored?.version === DISCLAIMER_VERSION;
+    } catch {
+      return false;
+    }
+  });
   const settlementsData = useSettlements();
   const auth = useAuth();
   const userId = auth.session?.user?.id;
@@ -1929,8 +2113,27 @@ export default function App() {
       />
     );
   } else if (tab === "profile") {
-    body = <ProfileScreen auth={auth} onBack={() => setTab("home")} />;
+    body = (
+      <ProfileScreen
+        auth={auth}
+        onBack={() => setTab("home")}
+        onOpenDisclaimer={() => setShowDisclaimer(true)}
+      />
+    );
   }
+
+  const acceptDisclaimer = () => {
+    try {
+      window.localStorage.setItem(
+        DISCLAIMER_STORAGE_KEY,
+        JSON.stringify({ version: DISCLAIMER_VERSION, acceptedAt: new Date().toISOString() })
+      );
+    } catch {
+      // The agreement still applies for this session if browser storage is unavailable.
+    }
+    setDisclaimerAccepted(true);
+    setShowDisclaimer(false);
+  };
 
   return (
     <div
@@ -1966,6 +2169,13 @@ export default function App() {
         <div style={{ flex: 1, overflowY: "auto" }}>{body}</div>
         <TabBar tab={tab} setTab={setTab} />
         {showBankPrompt && <BankPrompt onClose={() => setShowBankPrompt(false)} />}
+        {(!disclaimerAccepted || showDisclaimer) && (
+          <DisclaimerAgreement
+            requiresAgreement={!disclaimerAccepted}
+            onAccept={acceptDisclaimer}
+            onClose={() => setShowDisclaimer(false)}
+          />
+        )}
       </div>
     </div>
   );
