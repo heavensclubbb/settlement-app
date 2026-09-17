@@ -1781,143 +1781,206 @@ function DisclaimerAgreement({ requiresAgreement, onAccept, onClose }) {
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="disclaimer-title"
       style={{
         position: "absolute",
         inset: 0,
         zIndex: 50,
-        background: paper,
+        background: "rgba(22, 45, 42, 0.62)",
         display: "flex",
-        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 16,
+        boxSizing: "border-box",
       }}
     >
-      <div style={{ padding: "20px 20px 14px", borderBottom: `1px solid ${hairline}` }}>
-        <div id="disclaimer-title" style={{ fontFamily: sans, fontSize: 19, fontWeight: 700, color: ink }}>
-          Important use disclaimer
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="disclaimer-title"
+        style={{
+          width: "100%",
+          maxHeight: "calc(100% - 12px)",
+          background: paper,
+          border: "1px solid rgba(255,255,255,0.7)",
+          borderRadius: 20,
+          boxShadow: "0 22px 55px rgba(7, 25, 22, 0.32)",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
+          style={{
+            padding: "18px 20px 16px",
+            borderBottom: `1px solid ${hairline}`,
+            background: "linear-gradient(135deg, #EDF3EE 0%, #F7F8F5 100%)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: 10,
+                background: ink,
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <ShieldCheck size={18} />
+            </div>
+            <div>
+              <div id="disclaimer-title" style={{ fontFamily: sans, fontSize: 18, fontWeight: 700, color: ink }}>
+                Important use disclaimer
+              </div>
+              <div style={{ fontFamily: sans, fontSize: 11.5, color: slate, marginTop: 2 }}>
+                Please review before continuing
+              </div>
+            </div>
+          </div>
         </div>
-        <div style={{ fontFamily: sans, fontSize: 11.5, color: slate, marginTop: 4 }}>
-          Last updated September 17, 2026
-        </div>
-      </div>
 
-      <div style={{ flex: 1, overflowY: "auto", padding: "18px 20px" }}>
-        <div style={{ fontFamily: sans, fontSize: 13.5, color: ink, lineHeight: 1.55 }}>
-          Please read this before using Settled.
-        </div>
-
-        <DisclaimerSection title="Informational tool only">
-          Settled provides general information from public sources. Settled is not a law
-          firm, lawyer, settlement administrator, claims processor, financial adviser,
-          tax adviser, or government agency. Nothing in the app is legal, financial,
-          tax, or other professional advice, and using it does not create an
-          attorney-client or other professional relationship.
-        </DisclaimerSection>
-
-        <DisclaimerSection title="Verify everything independently">
-          Settlement information may be incomplete, delayed, inaccurate, or outdated.
-          Eligibility, deadlines, required proof, claim procedures, and payment amounts
-          are controlled by the official court documents and settlement administrator.
-          Always verify the official notice and claim website before acting.
-        </DisclaimerSection>
-
-        <DisclaimerSection title="You are responsible for filing">
-          Settled does not file, submit, review, approve, or monitor claims for you.
-          Opening a link or tracking an item in the app does not submit a claim. You are
-          solely responsible for determining eligibility, meeting deadlines, providing
-          accurate information, and completing the official filing process.
-        </DisclaimerSection>
-
-        <DisclaimerSection title="No guaranteed result">
-          Settled does not guarantee that you qualify, that a claim will be accepted,
-          that information will remain available, or that you will receive any payment.
-          To the fullest extent permitted by law, you use the app and rely on its
-          information at your own risk.
-        </DisclaimerSection>
-
-        <DisclaimerSection title="Third-party websites">
-          Claim forms and notices are hosted by third parties that Settled does not
-          control. Their terms, privacy practices, security, availability, and content
-          apply when you leave this app. Review a destination before sharing personal or
-          sensitive information.
-        </DisclaimerSection>
-
-        {requiresAgreement && (
-          <label
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 18px 18px" }}>
+          <div
             style={{
-              display: "flex",
-              gap: 10,
-              alignItems: "flex-start",
-              marginTop: 20,
-              padding: 14,
               border: `1px solid ${hairline}`,
-              borderRadius: 12,
+              borderRadius: 14,
               background: "#fff",
-              cursor: "pointer",
+              padding: "0 14px",
+              boxShadow: "0 4px 14px rgba(22,45,42,0.05)",
             }}
           >
-            <input
-              type="checkbox"
-              checked={checked}
-              onChange={(e) => setChecked(e.target.checked)}
-              style={{ marginTop: 3, width: 17, height: 17, accentColor: ink }}
-            />
-            <span style={{ fontFamily: sans, fontSize: 12.5, color: ink, lineHeight: 1.5 }}>
-              I have read and understand this disclaimer, and I agree to use Settled on
-              this basis.
-            </span>
-          </label>
-        )}
-      </div>
+            <div
+              style={{
+                padding: "12px 0",
+                borderBottom: `1px solid ${hairline}`,
+                fontFamily: sans,
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: 0.6,
+                textTransform: "uppercase",
+                color: signal,
+              }}
+            >
+              Use agreement · Updated September 17, 2026
+            </div>
 
-      <div style={{ padding: "14px 20px max(20px, env(safe-area-inset-bottom))", borderTop: `1px solid ${hairline}` }}>
-        {requiresAgreement ? (
-          <button
-            disabled={!checked}
-            onClick={onAccept}
-            style={{
-              width: "100%",
-              background: checked ? ink : "#C9CBCF",
-              color: paper,
-              border: "none",
-              borderRadius: 12,
-              padding: "14px 0",
-              fontFamily: sans,
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: checked ? "pointer" : "default",
-            }}
-          >
-            Agree and continue
-          </button>
-        ) : (
-          <button
-            onClick={onClose}
-            style={{
-              width: "100%",
-              background: ink,
-              color: paper,
-              border: "none",
-              borderRadius: 12,
-              padding: "14px 0",
-              fontFamily: sans,
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            Close
-          </button>
-        )}
+            <DisclaimerSection title="Informational tool only">
+              Settled provides general information from public sources. Settled is not a law
+              firm, lawyer, settlement administrator, claims processor, financial adviser,
+              tax adviser, or government agency. Nothing in the app is legal, financial,
+              tax, or other professional advice, and using it does not create an
+              attorney-client or other professional relationship.
+            </DisclaimerSection>
+
+            <DisclaimerSection title="Verify everything independently">
+              Settlement information may be incomplete, delayed, inaccurate, or outdated.
+              Eligibility, deadlines, required proof, claim procedures, and payment amounts
+              are controlled by the official court documents and settlement administrator.
+              Always verify the official notice and claim website before acting.
+            </DisclaimerSection>
+
+            <DisclaimerSection title="You are responsible for filing">
+              Settled does not file, submit, review, approve, or monitor claims for you.
+              Opening a link or tracking an item in the app does not submit a claim. You are
+              solely responsible for determining eligibility, meeting deadlines, providing
+              accurate information, and completing the official filing process.
+            </DisclaimerSection>
+
+            <DisclaimerSection title="No guaranteed result">
+              Settled does not guarantee that you qualify, that a claim will be accepted,
+              that information will remain available, or that you will receive any payment.
+              To the fullest extent permitted by law, you use the app and rely on its
+              information at your own risk.
+            </DisclaimerSection>
+
+            <DisclaimerSection title="Third-party websites" last>
+              Claim forms and notices are hosted by third parties that Settled does not
+              control. Their terms, privacy practices, security, availability, and content
+              apply when you leave this app. Review a destination before sharing personal or
+              sensitive information.
+            </DisclaimerSection>
+          </div>
+
+          {requiresAgreement && (
+            <label
+              style={{
+                display: "flex",
+                gap: 11,
+                alignItems: "flex-start",
+                marginTop: 14,
+                padding: 14,
+                border: "1px solid #E5C692",
+                borderRadius: 12,
+                background: goldSoft,
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={(e) => setChecked(e.target.checked)}
+                style={{ marginTop: 3, width: 17, height: 17, accentColor: ink, flexShrink: 0 }}
+              />
+              <span style={{ fontFamily: sans, fontSize: 12.5, color: ink, lineHeight: 1.5 }}>
+                I have read and understand this disclaimer, and I agree to use Settled on
+                this basis.
+              </span>
+            </label>
+          )}
+        </div>
+
+        <div style={{ padding: "13px 18px 16px", borderTop: `1px solid ${hairline}`, background: "#fff" }}>
+          {requiresAgreement ? (
+            <button
+              disabled={!checked}
+              onClick={onAccept}
+              style={{
+                width: "100%",
+                background: checked ? ink : "#C9CBCF",
+                color: paper,
+                border: "none",
+                borderRadius: 12,
+                padding: "14px 0",
+                fontFamily: sans,
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: checked ? "pointer" : "default",
+              }}
+            >
+              Agree and continue
+            </button>
+          ) : (
+            <button
+              onClick={onClose}
+              style={{
+                width: "100%",
+                background: ink,
+                color: paper,
+                border: "none",
+                borderRadius: 12,
+                padding: "14px 0",
+                fontFamily: sans,
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-function DisclaimerSection({ title, children }) {
+function DisclaimerSection({ title, children, last = false }) {
   return (
-    <section style={{ marginTop: 18 }}>
+    <section style={{ padding: "13px 0", borderBottom: last ? "none" : `1px solid ${hairline}` }}>
       <div style={{ fontFamily: sans, fontSize: 12.5, fontWeight: 700, color: ink, marginBottom: 5 }}>
         {title}
       </div>
